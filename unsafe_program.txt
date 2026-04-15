@@ -1,0 +1,25 @@
+import psutil
+
+# List of keywords to flag in process names
+SUSPICIOUS_KEYWORDS = ["keylog", "spy", "hack", "python", "uipath"]
+
+def scan_processes():
+    print("Scanning running processes...\n")
+    
+    # Iterate through all running processes
+    for proc in psutil.process_iter(['pid', 'name']):
+        try:
+            # Get the process name and convert to lowercase for matching
+            name = proc.info['name'].lower()
+            
+            # Check if any keyword exists in the process name
+            for keyword in SUSPICIOUS_KEYWORDS:
+                if keyword in name:
+                    print(f"[!] Suspicious: PID {proc.info['pid']} - {proc.info['name']}")
+                    
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            # Skip processes that end before we can scan them or require higher privileges
+            pass
+
+if __name__ == "__main__":
+    scan_processes()
